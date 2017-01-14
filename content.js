@@ -18,8 +18,8 @@ function TimesheetDb() {
         
     }
 
-    this.update = function(date_map_timesheet) {
-        chrome.storage.sync.set(date_map_timesheet);
+    this.update = function(date_map) {
+        chrome.storage.sync.set(date_map);
     }
 }
 
@@ -66,7 +66,7 @@ function parseTimesheet(appBody) {
         }
     }
 
-    console.log("Converting so date is key...");
+    console.log("Converting...");
     date_map_timesheet = {};
     for (var i = 0; i < timesheet.length; i++) {
         var charge_str = timesheet[i].title;
@@ -87,6 +87,55 @@ function parseTimesheet(appBody) {
     return date_map_timesheet;
 }
 
+function setTimesheetChangeHooks(appBody, db) {
+    console.log("Setting timesheet change hooks...");
+
+    appBody.find("#editor").on("blur", function(event) {
+        var parent = event.currentTarget.parentNode;
+        var id = $(parent).attr("id");
+
+        if (id && id.startsWith("hrs")) {
+            console.log("Timesheet updated");
+            
+            var hours = parseFloat($(this).val());
+            if (!isNaN(hours)) {
+                console.log("Value: ", hours);
+                ts = parseTimesheet(appBody);
+
+                var row_col_str = id.slice(3);
+                var row_col = row_col_str.split("_");
+                var col = 0;
+                var row = 0;
+                var date = null;
+
+                if (row_col.length != 2) {
+                    console.log("Could not get column for current hours entry");
+                    return;
+                } else {
+                    row = row_col[0];
+                    col = row_col[1];
+                }
+                
+                var dateStr = $("#hrsHeaderText"+col).text();
+                dateStr = dateStr.slice(3);
+                if (dateStr.length >= 3) {
+                    var datePrts = dateStr.split("/");
+                    if (datePrts.length == 2) {
+                        // Subtract one from month b/c indexed at 0
+                        date = new Date(year, (parseInt(datePrts[0]) - 1), parseInt(datePrts[1]));
+                        ts[date][row].value = hours;
+
+                        console.log("Parsed TS: ", ts);
+                        db.update(ts);
+                    } else {
+                        console.log("ERROR: Invalid date: ", dateStr);
+                    }
+                }
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
     console.log("Deltrek Activated. On Deltek page.");
     
@@ -98,8 +147,12 @@ $(document).ready(function() {
         
         if (appBody.find("#appTitle").text() == "Timesheet") {
             console.log("Timesheet found!");
+            
             ts = parseTimesheet(appBody);
             console.log("Parsed: ", ts);
+
+            setTimesheetChangeHooks(appBody, db);
+
             db.update(ts);
         } else {
             console.log("Not on timesheet page. App title: ", appBody.find("#appTitle").text());
