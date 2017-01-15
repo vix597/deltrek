@@ -23,9 +23,25 @@ function TimesheetDb() {
     }
 }
 
-function parseTimesheet(appBody) {
+function dateFromString(dateStr) {
     var d = new Date();
     var year = d.getFullYear();
+    var dateStr = dateStr.slice(3);
+    
+    if (dateStr.length >= 3) {
+        var datePrts = dateStr.split("/");
+        if (datePrts.length == 2) {
+            // Subtract one from month b/c indexed at 0
+            return new Date(year, (parseInt(datePrts[0]) - 1), parseInt(datePrts[1]));
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
+
+function parseTimesheet(appBody) {
     var timesheet = [];
 
     console.log("Getting charge numbers...");
@@ -39,16 +55,9 @@ function parseTimesheet(appBody) {
     console.log("Getting dates...");
     appBody.find("#hrsHeader").children().each(function(index, item) {
         for (var i = 0; i < timesheet.length; i++) {
-            var dateStr = $(item).text().slice(3);
-            if (dateStr.length >= 3) {
-                var datePrts = dateStr.split("/");
-                if (datePrts.length == 2) {
-                    // Subtract one from month b/c indexed at 0
-                    var date = new Date(year, (parseInt(datePrts[0]) - 1), parseInt(datePrts[1]));
-                    timesheet[i].hours.push({date:date, value:0});
-                } else {
-                    console.log("ERROR: Invalid date: ", dateStr);
-                }
+            var date = dateFromString($(item).text());
+            if (date) {
+                timesheet[i].hours.push({date:date, value:0});
             }
         }
     });
@@ -87,50 +96,43 @@ function parseTimesheet(appBody) {
     return date_map_timesheet;
 }
 
-function setTimesheetChangeHooks(appBody, db) {
+function setTimesheetChangeHook(appBody, db) {
     console.log("Setting timesheet change hooks...");
 
     appBody.find("#editor").on("blur", function(event) {
         var parent = event.currentTarget.parentNode;
         var id = $(parent).attr("id");
 
-        if (id && id.startsWith("hrs")) {
-            console.log("Timesheet updated");
-            
+        if (id && id.startsWith("hrs")) {            
             var hours = parseFloat($(this).val());
-            if (!isNaN(hours)) {
-                console.log("Value: ", hours);
-                ts = parseTimesheet(appBody);
+            if (isNaN(hours)) {
+                hours = 0.0;
+            }
 
-                var row_col_str = id.slice(3);
-                var row_col = row_col_str.split("_");
-                var col = 0;
-                var row = 0;
-                var date = null;
+            ts = parseTimesheet(appBody);
 
-                if (row_col.length != 2) {
-                    console.log("Could not get column for current hours entry");
-                    return;
-                } else {
-                    row = row_col[0];
-                    col = row_col[1];
-                }
-                
-                var dateStr = $("#hrsHeaderText"+col).text();
-                dateStr = dateStr.slice(3);
-                if (dateStr.length >= 3) {
-                    var datePrts = dateStr.split("/");
-                    if (datePrts.length == 2) {
-                        // Subtract one from month b/c indexed at 0
-                        date = new Date(year, (parseInt(datePrts[0]) - 1), parseInt(datePrts[1]));
-                        ts[date][row].value = hours;
+            var row_col_str = id.slice(3);
+            var row_col = row_col_str.split("_");
+            var col = 0;
+            var row = 0;
+            var date = null;
 
-                        console.log("Parsed TS: ", ts);
-                        db.update(ts);
-                    } else {
-                        console.log("ERROR: Invalid date: ", dateStr);
-                    }
-                }
+            if (row_col.length != 2) {
+                console.log("ERROR: Could not get column for current hours entry");
+                return;
+            } else {
+                row = row_col[0];
+                col = row_col[1];
+            }
+            
+            var dateStr = appBody.find("#hrsHeaderText"+col).text();
+
+            date = dateFromString(dateStr);
+            
+            if (date) {
+                ts[date][row].value = hours;
+                console.log("Updated TS: ", ts);
+                db.update(ts);
             }
         }
     });
@@ -150,10 +152,9 @@ $(document).ready(function() {
             
             ts = parseTimesheet(appBody);
             console.log("Parsed: ", ts);
-
-            setTimesheetChangeHooks(appBody, db);
-
             db.update(ts);
+
+            setTimesheetChangeHook(appBody, db);            
         } else {
             console.log("Not on timesheet page. App title: ", appBody.find("#appTitle").text());
         }
