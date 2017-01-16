@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-
 function TimesheetDb() {
     this.month = 0;
     this.month_data = null;
