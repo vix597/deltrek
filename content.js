@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 function TimesheetDb() {
     this.month = 0;
@@ -47,8 +48,9 @@ function parseTimesheet(appBody) {
     console.log("Getting charge numbers...");
     appBody.find("#udtColumn0").children().each(function(index, item) {
         var title = $(item).attr("title");
-        if (title) {
-            timesheet.push({title:title, hours:[]});
+        var charge_number = appBody.find("#udt" + index + "_1").text();
+        if (title && charge_number) {
+            timesheet.push({title:title, charge_number:charge_number, hours:[]});
         }
     });
 
@@ -79,6 +81,7 @@ function parseTimesheet(appBody) {
     date_map_timesheet = {};
     for (var i = 0; i < timesheet.length; i++) {
         var charge_str = timesheet[i].title;
+        var charge_number = timesheet[i].charge_number;
         for (var j = 0; j < timesheet[i].hours.length; j++) {
             var key = timesheet[i].hours[j].date.toString();
 
@@ -88,6 +91,7 @@ function parseTimesheet(appBody) {
 
             date_map_timesheet[key].push({
                 title: charge_str,
+                charge_number:charge_number,
                 value: timesheet[i].hours[j].value
             });
         }
