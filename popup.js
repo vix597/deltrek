@@ -50,7 +50,7 @@ $(document).ready(function() {
                 var hours = charge_to_total[key];
                 var allowed_hours = 0;
                 var key_as_id = key.trim().replace(/\s/g,'');
-                if (key in items) {
+                if (items && key in items) {
                     allowed_hours = items[key];
                 }
 
