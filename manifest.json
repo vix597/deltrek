@@ -9,11 +9,16 @@
             ],
             "js": [
                 "jquery-3.1.1.min.js",
+                "timesheetdb.js",
                 "content.js"
             ] 
         }
     ],
     "permissions": [
         "storage"
-    ]
+    ],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    }
 }
