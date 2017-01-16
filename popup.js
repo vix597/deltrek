@@ -56,7 +56,7 @@ $(document).ready(function() {
 
                 $("#deltrek").prepend(
                     $("<p>").append(
-                        $("<label for='" + key_as_id + "'>").text(key + " ( " + hours + ")")
+                        $("<label for='" + key_as_id + "'>").text(key + " ( Worked: " + hours + "/" + allowed_hours + ")")
                     ).append(
                         $("<input type='number' step='0.5' min='0' id='" + key_as_id + "' name='" + key_as_id + "' value='" + allowed_hours + "'>")
                     )
