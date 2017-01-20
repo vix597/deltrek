@@ -1,7 +1,8 @@
 {
     "manifest_version": 2,
     "name": "Deltrek! Time Tracking that works.",
-    "version": "0.1",
+    "short_name": "Deltrek!",
+    "version": "0.0.0.2",
     "content_scripts": [
         {
             "matches": [
