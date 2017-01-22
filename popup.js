@@ -23,6 +23,10 @@ function updateHours(event) {
     g_db.update_allowed_hours(allowed_hours);
 }
 
+function hideCharge(event) {
+    console.log("Hide charge: ", event);
+}
+
 $(document).ready(function() { 
     $('#save').click(updateHours);
 
@@ -59,6 +63,10 @@ $(document).ready(function() {
                         $("<label for='" + key_as_id + "'>").text(key + " ( Worked: " + hours + "/" + allowed_hours + ")")
                     ).append(
                         $("<input type='number' step='0.5' min='0' id='" + key_as_id + "' name='" + key_as_id + "' value='" + allowed_hours + "'>")
+                    ).append(
+                        $("<label for='" + key_as_id + "-checkbox'>").text("Hide")
+                    ).append(
+                        $("<input type='checkbox' id='" + key_as_id + "-checkbox'>").click(hideCharge)
                     )
                 );
             }
