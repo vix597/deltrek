@@ -2,14 +2,14 @@
     "manifest_version": 2,
     "name": "Deltrek! Time Tracking that works.",
     "short_name": "Deltrek!",
-    "version": "0.0.0.2",
+    "version": "0.0.0.3",
     "content_scripts": [
         {
             "matches": [
                 "https://te3prod.deltekenterprise.com/DeltekTC/TimeCollection.msv"
             ],
             "js": [
-                "js/jquery-3.1.1.min.js",
+                "external/js/jquery-3.1.1.min.js",
                 "timesheetdb.js",
                 "content.js"
             ] 
