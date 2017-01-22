@@ -9,7 +9,7 @@
                 "https://te3prod.deltekenterprise.com/DeltekTC/TimeCollection.msv"
             ],
             "js": [
-                "jquery-3.1.1.min.js",
+                "js/jquery-3.1.1.min.js",
                 "timesheetdb.js",
                 "content.js"
             ] 
