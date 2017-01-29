@@ -6,6 +6,17 @@ var g_month_name = monthNames[new Date().getMonth()];
 var g_db = new TimesheetDb();
 var g_current_month_charges = [];
 
+function htmlEscapeId(str) {
+    return str
+        .trim()
+        .replace(/\s/g, '-')
+        .replace(/&/g, '')
+        .replace(/"/g, '')
+        .replace(/'/g, '')
+        .replace(/</g, '')
+        .replace(/>/g, '');
+}
+
 function updateHours(event) {
     var allowed_hours = {}
 
@@ -53,20 +64,36 @@ $(document).ready(function() {
             for (key in charge_to_total) {
                 var hours = charge_to_total[key];
                 var allowed_hours = 0;
-                var key_as_id = key.trim().replace(/\s/g,'');
+                var key_as_id = htmlEscapeId(key);
                 if (items && key in items) {
                     allowed_hours = items[key];
                 }
 
+                // TODO: Determine this based on how close they are to going over
+                panelType = "panel-default";
+
                 $("#deltrek").prepend(
-                    $("<p>").append(
-                        $("<label for='" + key_as_id + "'>").text(key + " ( Worked: " + hours + "/" + allowed_hours + ")")
+                    $("<div class='panel " + panelType + "'>").append(
+                        $("<div class='panel-heading' role='tab' id='" + key_as_id + "-heading'>").append(
+                            $("<h4 class='panel-title'>").append(
+                                $("<a role='button' data-toggle='collapse' data-parent='#deltrek' href='#" + key_as_id + "-collapse' aria-expanded='true' aria-controls='" + key_as_id + "-collapse'>")
+                                .text(key + " (Worked: " + hours + "/" + allowed_hours + ")")
+                            )
+                        )
                     ).append(
-                        $("<input type='number' step='0.5' min='0' id='" + key_as_id + "' name='" + key_as_id + "' value='" + allowed_hours + "'>")
-                    ).append(
-                        $("<label for='" + key_as_id + "-checkbox'>").text("Hide")
-                    ).append(
-                        $("<input type='checkbox' id='" + key_as_id + "-checkbox'>").click(hideCharge)
+                        $("<div id='" + key_as_id + "-collapse' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + key_as_id + "-heading'>").append(
+                            $("<div class='panel-body'>").append(
+                                $("<label>").html(
+                                    "Allowed hours: <input type='number' step='0.5' min='0' id='" + key_as_id + "'>"
+                                )
+                            ).append(
+                                $("<label>").html(
+                                    "Plus/Minus: <input type='number' step='1' min='0' id='" + key_as_id + "-percentage'>%"
+                                )
+                            ).append(
+                                $("<label>").html("&nbsp; Hide this line").prepend($("<input type='checkbox'>"))
+                            )
+                        )
                     )
                 );
             }
