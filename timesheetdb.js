@@ -38,10 +38,8 @@ function TimesheetDb() {
 
     this.load_allowed_hours = function(complete=null) {
         chrome.storage.sync.get(this.allowed_hours_key, function(items) {
-            if (items && Object.keys(items).length > 0) {
-                if (complete) {
-                    complete(items[this.allowed_hours_key]);
-                }
+            if (complete) {
+                complete(items);
             }
         }.bind(this))
     }

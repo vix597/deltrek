@@ -80,6 +80,10 @@ function refresh() {
         g_current_month_charges = Object.keys(charge_to_total);
 
         g_db.load_allowed_hours(function(items) {
+            if (!items || !Object.keys(items).length) {
+                console.log("WARNING: No items loaded from the database");
+            }
+
             // Figure out if we should show hidden charges
             var show_hidden = false;
             $(":checked").each(function(index, item) {
