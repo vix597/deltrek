@@ -54,8 +54,6 @@ function refresh() {
     $("#deltrek").empty();
 
     g_db.load_month(function(items) {
-        $("#month-title").text("Hours for " + g_month_name);
-
         // Calculate current monthly totals for each charge number
         var charge_to_total = {};
         for (key in items) {
@@ -161,6 +159,8 @@ $(document).ready(function() {
     $("#show-hidden").click(function(event) {
         refresh();
     });
+
+    $("#month-title").text("Hours for " + g_month_name);
 
     refresh();
 });
