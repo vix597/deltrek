@@ -23,9 +23,9 @@ function TimesheetDb() {
         this.load(dates, function(items) {
             if (items && Object.keys(items).length > 0) {
                 $.extend(this.current_month_data, items);
-                if (complete) {
-                    complete(items);
-                }
+            }
+            if (complete) {
+                complete(items);
             }
         });
     }
@@ -38,8 +38,10 @@ function TimesheetDb() {
 
     this.load_allowed_hours = function(complete=null) {
         chrome.storage.sync.get(this.allowed_hours_key, function(items) {
-            if (complete) {
-                complete(items[this.allowed_hours_key]);
+            if (items && Object.keys(items).length > 0) {
+                if (complete) {
+                    complete(items[this.allowed_hours_key]);
+                }
             }
         }.bind(this))
     }

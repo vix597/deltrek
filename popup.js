@@ -54,6 +54,17 @@ function refresh() {
     $("#deltrek").empty();
 
     g_db.load_month(function(items) {
+        if(!items || !Object.keys(items).length) {
+            console.log("Nothing in database yet. Display help");
+            $("#deltrek").prepend(
+                $("<p>").text(
+                    "There is nothing in the Deltrek database yet. Start by logging into deltek and opening a timesheet. " +
+                    "Check back here once you've opened a timesheet. If there are any previous timesheets for this month that " +
+                    "you would like included in the totals, you will need to manually open each one (without using the navigation arrows " +
+                    "within deltek)")
+            );
+        }
+
         // Calculate current monthly totals for each charge number
         var charge_to_total = {};
         for (key in items) {
