@@ -39,7 +39,13 @@ function TimesheetDb() {
     this.load_allowed_hours = function(complete=null) {
         chrome.storage.sync.get(this.allowed_hours_key, function(items) {
             if (complete) {
-                complete(items);
+                if (items && this.allowed_hours_key in items) {
+                    console.log("Got user allowed hours data from DB: ", items);
+                    complete(items[this.allowed_hours_key]);
+                } else {
+                    console.log("WARNING: Could not retrieve data from the database. Items is either null or invalid: ", items);
+                    complete(null);
+                }
             }
         }.bind(this))
     }
