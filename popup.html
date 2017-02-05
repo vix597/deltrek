@@ -28,13 +28,30 @@
     <body>
         <div class="container-fluid">
             <h2 id="month-title"></h2>
-            <hr>
             <div>
-                <div id="deltrek" class="panel-group" role="tablist" aria-multiselectable="true">
-                    <!--Populated by js-->
+                <ul class="nav nav-tabs" role="tablist" id="mytabs">
+                    <li role="presentation" class="active"><a href="#hours" aria-controls="hours" role="tab" data-toggle="tab">Hours</a></li>
+                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="hours">
+                        <div id="deltrek" class="panel-group" role="tablist" aria-multiselectable="true">
+                            <!--Populated by js-->
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="settings">
+                        <label>
+                            Notifiaction Time:&nbsp;
+                            <input type="time" id="notif-time-input">
+                        </label>
+                        <label>
+                            <input id="enable-notification" type="checkbox">&nbsp; Enable Notification
+                        </label>
+                    </div>
                 </div>
                 <hr>
-                <button id="save" type="button" class="btn btn-primary">Save Hours</button>
+                <button id="save" type="button" class="btn btn-primary">Save</button>
                 <label>
                     <input id="show-hidden" type="checkbox">&nbsp; Show hidden
                 </label>

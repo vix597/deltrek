@@ -5,6 +5,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 var g_month_name = monthNames[new Date().getMonth()];
 var g_db = new TimesheetDb();
 var g_current_month_charges = [];
+var g_notifications_enabled = false;
 
 function htmlEscapeId(str) {
     return str
@@ -164,7 +165,21 @@ function refresh() {
     });
 }
 
-$(document).ready(function() { 
+$(document).ready(function() {
+    chrome.notifications.getPermissionLevel(function(level) {
+        if (level == "granted") {
+            console.log("Notifications allowed!");
+            g_notifications_enabled = true;
+        } else {
+            console.log("Notifications are not enabled for this extension");
+        }
+    });
+
+    $("#mytabs a").click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
     $('#save').click(updateHours);
 
     $("#show-hidden").click(function(event) {
@@ -174,4 +189,15 @@ $(document).ready(function() {
     $("#month-title").text("Hours for " + g_month_name);
 
     refresh();
+
+    chrome.notifications.create("test", 
+        {
+            type:"basic",
+            title: "Test notification",
+            message: "Don't forget your face",
+            iconUrl: "./icon.png",
+        },
+        function(notificationid) {
+            console.log("Notification ID: ", notificationid);
+    });
 });
