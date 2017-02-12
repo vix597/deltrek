@@ -4,6 +4,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 
 var g_month_name = monthNames[new Date().getMonth()];
 var g_db = new TimesheetDb();
+var g_settings = new SettingsDb();
 var g_current_month_charges = [];
 var g_notifications_enabled = false;
 
@@ -48,6 +49,18 @@ function updateHours(event) {
     g_db.update_allowed_hours(allowed_hours, function() {
         refresh();
     });
+
+    console.log("Updating settings");
+    var time = $("#notif-time-input").val();
+
+    // TODO: Figure out how to get the time into a Date() object
+
+    var notify = ($("#enable-notification:checked").length > 0);
+
+    console.log("Time: ", time);
+    console.log("Checked: ", notify);
+
+    g_settings.set({time:time, notify:notify}, function() {});
 }
 
 function refresh() {

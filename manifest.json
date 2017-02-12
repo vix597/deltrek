@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Deltrek! Time Tracking that works.",
     "short_name": "Deltrek!",
-    "version": "0.0.0.5",
+    "version": "0.0.0.6",
     "content_scripts": [
         {
             "matches": [
@@ -11,6 +11,7 @@
             "js": [
                 "external/js/jquery-3.1.1.min.js",
                 "timesheetdb.js",
+                "settingsdb.js",
                 "content.js"
             ] 
         }

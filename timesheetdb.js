@@ -5,7 +5,7 @@ function daysInMonth(month, year) {
 function TimesheetDb() {
     this.current_year = new Date().getFullYear();
     this.current_month = new Date().getMonth();
-    this.current_month_data = {}
+    this.current_month_data = {};
     this.allowed_hours_key = "allowed-hours-" + this.current_month + "-" + this.current_year;
 
     this.load = function(dateStrs, complete) {
