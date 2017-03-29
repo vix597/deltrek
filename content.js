@@ -123,11 +123,15 @@ $(document).ready(function() {
         if (appBody.find("#appTitle").text() == "Timesheet") {
             console.log("Timesheet found!");
 
-            ts = parseTimesheet(appBody);
-            console.log("Parsed: ", ts);
-            g_db.update(ts);
+            g_db.cleanup_storage(complete=function() {
+                console.log("Initial cleanup complete. Parsing timesheet.");
 
-            setTimesheetChangeHook(appBody);
+                ts = parseTimesheet(appBody);
+                console.log("Parsed: ", ts);
+                g_db.update(ts);
+
+                setTimesheetChangeHook(appBody);
+            });
         } else {
             console.log("Not on timesheet page. App title: ", appBody.find("#appTitle").text());
         }
