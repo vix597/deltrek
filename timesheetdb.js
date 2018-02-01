@@ -12,7 +12,7 @@ function TimesheetDb() {
         chrome.storage.sync.get(dateStrs, complete);
     }
 
-    this.load_month = function(complete=null) {
+    this.load_month = function(complete) {
         var days = daysInMonth(this.current_month, this.current_year);
         dates = [];
 
@@ -30,13 +30,13 @@ function TimesheetDb() {
         });
     }
 
-    this.update = function(date_map, complete=null) {
+    this.update = function(date_map, complete) {
         chrome.storage.sync.set(date_map, function() {
             this.load_month(complete);
         }.bind(this));
     }
 
-    this.load_allowed_hours = function(complete=null) {
+    this.load_allowed_hours = function(complete) {
         chrome.storage.sync.get(this.allowed_hours_key, function(items) {
             if (complete) {
                 if (items && this.allowed_hours_key in items) {
@@ -50,7 +50,7 @@ function TimesheetDb() {
         }.bind(this))
     }
 
-    this.update_allowed_hours = function(allowed_hours, complete=null) {
+    this.update_allowed_hours = function(allowed_hours, complete) {
         var obj = {};
         obj[this.allowed_hours_key] = allowed_hours;
 
@@ -59,5 +59,30 @@ function TimesheetDb() {
                 complete();
             }
         }.bind(this))
+    }
+
+    this.cleanup_storage = function(complete) {
+        // Clears storage for all months prior to the current month
+        this.load_month(function(data) {
+            var current_month = data;
+            this.load_allowed_hours(function(data) {
+                var current_allowed_hours = data;
+                
+                chrome.storage.sync.clear(function() {
+                    console.log("Storage cleared.");
+
+                    this.update(current_month, function() {
+                        console.log("Current month re-added to storage.");
+
+                        this.update_allowed_hours(current_allowed_hours, function() {
+                            console.log("Current allowed hours re-added to storage.");
+                            if (complete) {
+                                complete();
+                            }
+                        });
+                    }.bind(this));
+                }.bind(this));
+            }.bind(this));
+        }.bind(this));
     }
 }
