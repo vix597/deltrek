@@ -116,6 +116,37 @@ function setTimesheetChangeHook(appBody) {
 $(document).ready(function() {
     console.log("Deltrek Activated. On Deltek page.");
 
+    // Sleep for a few seconds to allow auto-fill to work
+    // if username info has been saved
+    setTimeout(function(){
+        // Get user and domain
+        var user = $("#uid").val();
+        var domain = $("#dom").val();
+
+        // If there's no user pre-populate with some useful info
+        if (!user) {
+            $("#uid").val("91286.<first_name>.<last_name>");
+        }
+
+        // If no domain, fill in with correct domain
+        if (!domain) {
+            $("#dom").val("AINFOSECCONFIG");
+        }
+    }, 2000);
+
+    var loginBtn = $("#loginButton");
+    if (loginBtn) {
+        loginBtn.on("click", function(e) {
+            console.log("Clicked: ", e);
+
+            // Keep clicking every second b/c sometimes deltek doesn't
+            // login on first click
+            setTimeout(function(){
+                loginBtn.click();
+            }, 1000);
+        });
+    }
+
     $("#unitFrame").on("load", function(){
         console.log("Iframe loaded. Scanning for timesheet application...");
         var appBody = $("#unitFrame").contents().find("body");
