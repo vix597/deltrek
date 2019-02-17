@@ -115,33 +115,33 @@ function refresh() {
                     display = "";
                 }
 
-                var panelType = 'panel-default';
+                var panelType = 'card-default';
                 if (!allowed_hours && hours > 0) {
-                    panelType = 'panel-danger';
+                    panelType = 'card-danger';
                 } else if(allowed_hours > 0) {
                     var current_percent = (hours / allowed_hours) * 100.0;
                     var lower_bound = 100 - percent;
                     var upper_bound = 100 + percent;
                     if (current_percent < lower_bound) {
-                        panelType = 'panel-warning';
+                        panelType = 'card-warning';
                     } else if (current_percent > upper_bound) {
-                        panelType = 'panel-danger';
+                        panelType = 'card-danger';
                     } else if (current_percent > lower_bound && current_percent < upper_bound) {
-                        panelType = 'panel-success';
+                        panelType = 'card-success';
                     }
                 }
 
                 $("#deltrek").prepend(
-                    $("<div class='panel " + panelType + "' " + display + " >").append(
-                        $("<div class='panel-heading' role='tab' id='" + key_as_id + "-heading'>").append(
-                            $("<h4 class='panel-title'>").append(
-                                $("<a role='button' data-toggle='collapse' data-parent='#deltrek' href='#" + key_as_id + "-collapse' aria-expanded='true' aria-controls='" + key_as_id + "-collapse'>")
+                    $("<div class='card " + panelType + "' " + display + " >").append(
+                        $("<div class='card-header' id='" + key_as_id + "-heading'>").append(
+                            $("<h2 class='mb-0'>").append(
+                                $("<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#" + key_as_id + "-collapse' aria-controls='" + key_as_id + "-collapse'>")
                                 .text(key + " (Worked: " + hours + "/" + allowed_hours + ")")
                             )
                         )
                     ).append(
-                        $("<div id='" + key_as_id + "-collapse' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + key_as_id + "-heading'>").append(
-                            $("<div class='panel-body'>").append(
+                        $("<div id='" + key_as_id + "-collapse' class='collapse' aria-labelledby='" + key_as_id + "-heading' data-parent='#deltrek'>").append(
+                            $("<div class='card-body'>").append(
                                 $("<label>").html(
                                     "Allowed hours: <input type='number' step='0.5' min='0' id='" + key_as_id + "' value='" + allowed_hours + "'>"
                                 )
@@ -155,6 +155,8 @@ function refresh() {
                         )
                     )
                 );
+                // Enable the collapsibles
+                $('#' + key_as_id + '-collapse').collapse({toggle: false});
             }
         });
     });
