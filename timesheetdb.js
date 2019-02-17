@@ -67,7 +67,7 @@ function TimesheetDb() {
             var current_month = data;
             this.load_allowed_hours(function(data) {
                 var current_allowed_hours = data;
-                
+
                 chrome.storage.sync.clear(function() {
                     console.log("Storage cleared.");
 

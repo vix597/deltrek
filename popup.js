@@ -14,7 +14,8 @@ function htmlEscapeId(str) {
         .replace(/"/g, '')
         .replace(/'/g, '')
         .replace(/</g, '')
-        .replace(/>/g, '');
+        .replace(/>/g, '')
+        .replace(/:/g, '');
 }
 
 function updateHours(event) {
@@ -42,7 +43,7 @@ function updateHours(event) {
         }
     });
 
-    console.log("Update hours: ", allowed_hours);
+    console.debug("Update hours: ", allowed_hours);
 
     g_db.update_allowed_hours(allowed_hours, function() {
         refresh();
@@ -55,7 +56,8 @@ function refresh() {
 
     g_db.load_month(function(items) {
         if(!items || !Object.keys(items).length) {
-            console.log("Nothing in database yet. Display help");
+            console.debug("Nothing in database yet. Display help");
+
             $("#deltrek").prepend(
                 $("<p>").text(
                     "There is nothing in the Deltrek database yet. Start by logging into deltek and opening a timesheet. " +
@@ -81,16 +83,10 @@ function refresh() {
 
         g_db.load_allowed_hours(function(items) {
             // Figure out if we should show hidden charges
-            var show_hidden = false;
-            $(":checked").each(function(index, item) {
-                // The show hidden checkbox is the only checkbox without an ID
-                if ($(item).attr("id") == "show-hidden") {
-                    show_hidden = true;
-                }
-            });
+            var show_hidden = $("#show-hidden").is(":checked");
 
-            console.log("Allowed hours: ", items);
-            console.log("Showing hidden? ", show_hidden);
+            console.debug("Allowed hours: ", items);
+            console.debug("Showing hidden? ", show_hidden);
 
             for (key in charge_to_total) {
                 var hours = charge_to_total[key];
@@ -164,14 +160,27 @@ function refresh() {
     });
 }
 
-$(document).ready(function() { 
+$(document).ready(function() {
     $('#save').click(updateHours);
 
-    $("#show-hidden").click(function(event) {
+    $("#show-hidden").click(function() {
         refresh();
     });
 
     $("#month-title").text("Hours for " + g_month_name);
+
+    // Don't show the 'Go to Deltek' link if we're on the Deltek page
+    chrome.tabs.query({
+        active: true,
+        url: "*://*.deltekenterprise.com/*"
+    }, function(result) {
+        console.debug("Matching tabs: ", result);
+
+        if (result && result.length) {
+            console.debug("We're on the deltek page, don't show 'Go to Deltek' link");
+            $("#go-to-deltek").hide();
+        }
+    });
 
     refresh();
 });

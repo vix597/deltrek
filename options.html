@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="Popup for Deltrek chrome extension">
+        <meta name="author" content="Sean LaPlante">
+
+        <title>Deltrek Options</title>
+
+        <!-- Styles -->
+        <link href="external/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="card p-0 m-0">
+            <h4 class="card-header">Deltrek Options</h4>
+
+            <div class="card-body">
+                <div class="input-group">
+                    <label>
+                        <input id="show-hidden" type="checkbox">&nbsp; Show hidden hours
+                        <small id="show-hidden-help" class="form-text text-muted">
+                            Show or hide charge codes that have been hidden.
+                        </small>
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input id="enable-reminders" type="checkbox">&nbsp; Enable Reminders
+                        <small id="show-hidden-help" class="form-text text-muted">
+                            Enable or disable chrome notifications to complete hours.
+                        </small>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card-footer text-muted row">
+                <div class="input-group col col-4">
+                    <button id="save" type="button" class="btn btn-primary">Save Options</button>
+                </div>
+
+                <div class="input-group col">
+                    <p id="status" class="m-0 d-flex align-items-center"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script src="external/js/jquery-3.3.1.min.js"></script>
+        <script src="external/js/bootstrap.bundle.min.js"></script>
+        <script src="options.js"></script>
+    </body>
+</html>

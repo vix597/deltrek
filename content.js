@@ -92,7 +92,7 @@ function setTimesheetChangeHook(appBody) {
             var date = null;
 
             if (row_col.length != 2) {
-                console.log("ERROR: Could not get column for current hours entry");
+                console.error("ERROR: Could not get column for current hours entry");
                 return;
             } else {
                 row = row_col[0];
@@ -106,7 +106,7 @@ function setTimesheetChangeHook(appBody) {
             if (date) {
                 ts[date][row].value = hours;
                 g_db.update(ts, function(items) {
-                    console.log("DB Items: ", items);
+                    console.debug("DB Items: ", items);
                 });
             }
         }
@@ -114,57 +114,26 @@ function setTimesheetChangeHook(appBody) {
 }
 
 $(document).ready(function() {
-    console.log("Deltrek Activated. On Deltek page.");
-
-    // Sleep for a few seconds to allow auto-fill to work
-    // if username info has been saved
-    setTimeout(function(){
-        // Get user and domain
-        var user = $("#uid").val();
-        var domain = $("#dom").val();
-
-        // If there's no user pre-populate with some useful info
-        if (!user) {
-            $("#uid").val("91286.<first_name>.<last_name>");
-        }
-
-        // If no domain, fill in with correct domain
-        if (!domain) {
-            $("#dom").val("AINFOSECCONFIG");
-        }
-    }, 2000);
-
-    var loginBtn = $("#loginButton");
-    if (loginBtn) {
-        loginBtn.on("click", function(e) {
-            console.log("Clicked: ", e);
-
-            // Keep clicking every second b/c sometimes deltek doesn't
-            // login on first click
-            setTimeout(function(){
-                loginBtn.click();
-            }, 1000);
-        });
-    }
+    console.info("Deltrek Activated. On Deltek page.");
 
     $("#unitFrame").on("load", function(){
-        console.log("Iframe loaded. Scanning for timesheet application...");
+        console.debug("Iframe loaded. Scanning for timesheet application...");
         var appBody = $("#unitFrame").contents().find("body");
 
         if (appBody.find("#appTitle").text() == "Timesheet") {
-            console.log("Timesheet found!");
+            console.info("Timesheet found!");
 
             g_db.cleanup_storage(complete=function() {
-                console.log("Initial cleanup complete. Parsing timesheet.");
+                console.debug("Initial cleanup complete. Parsing timesheet.");
 
                 ts = parseTimesheet(appBody);
-                console.log("Parsed: ", ts);
+                console.debug("Parsed: ", ts);
                 g_db.update(ts);
 
                 setTimesheetChangeHook(appBody);
             });
         } else {
-            console.log("Not on timesheet page. App title: ", appBody.find("#appTitle").text());
+            console.debug("Not on timesheet page. App title: ", appBody.find("#appTitle").text());
         }
     });
 });
