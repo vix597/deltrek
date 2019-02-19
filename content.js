@@ -116,6 +116,16 @@ function setTimesheetChangeHook(appBody) {
 $(document).ready(function() {
     console.info("Deltrek Activated. On Deltek page.");
 
+    chrome.storage.sync.get({
+        login_domain: ""
+    }, function(items) {
+        console.debug("Content page options loaded: ", items);
+        if (items.login_domain && items.login_domain.length) {
+            console.debug("Setting domain: ", items.login_domain);
+            $("#dom").val(items.login_domain);
+        }
+    });
+
     $("#unitFrame").on("load", function(){
         console.debug("Iframe loaded. Scanning for timesheet application...");
         var appBody = $("#unitFrame").contents().find("body");

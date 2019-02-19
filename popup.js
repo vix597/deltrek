@@ -10,12 +10,7 @@ function htmlEscapeId(str) {
     return str
         .trim()
         .replace(/\s/g, '-')
-        .replace(/&/g, '')
-        .replace(/"/g, '')
-        .replace(/'/g, '')
-        .replace(/</g, '')
-        .replace(/>/g, '')
-        .replace(/:/g, '');
+        .replace(/[^A-Za-z0-9\-]/g, '');
 }
 
 function updateHours(event) {
@@ -115,27 +110,27 @@ function refresh() {
                     display = "";
                 }
 
-                var panelType = 'card-default';
+                var panelType = '';
                 if (!allowed_hours && hours > 0) {
-                    panelType = 'card-danger';
+                    panelType = 'bg-danger';
                 } else if(allowed_hours > 0) {
                     var current_percent = (hours / allowed_hours) * 100.0;
                     var lower_bound = 100 - percent;
                     var upper_bound = 100 + percent;
                     if (current_percent < lower_bound) {
-                        panelType = 'card-warning';
+                        panelType = 'bg-warning';
                     } else if (current_percent > upper_bound) {
-                        panelType = 'card-danger';
+                        panelType = 'bg-danger';
                     } else if (current_percent > lower_bound && current_percent < upper_bound) {
-                        panelType = 'card-success';
+                        panelType = 'bg-success';
                     }
                 }
 
                 $("#deltrek").prepend(
-                    $("<div class='card " + panelType + "' " + display + " >").append(
+                    $("<div class='card text-white " + panelType + "' " + display + " >").append(
                         $("<div class='card-header' id='" + key_as_id + "-heading'>").append(
                             $("<h2 class='mb-0'>").append(
-                                $("<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#" + key_as_id + "-collapse' aria-controls='" + key_as_id + "-collapse'>")
+                                $("<button class='btn btn-link text-white' type='button' data-toggle='collapse' data-target='#" + key_as_id + "-collapse' aria-controls='" + key_as_id + "-collapse'>")
                                 .text(key + " (Worked: " + hours + "/" + allowed_hours + ")")
                             )
                         )

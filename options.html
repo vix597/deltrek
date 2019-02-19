@@ -30,9 +30,17 @@
                     <label>
                         <input id="enable-reminders" type="checkbox">&nbsp; Enable Reminders
                         <small id="show-hidden-help" class="form-text text-muted">
-                            Enable or disable chrome notifications to complete hours.
+                            Enable or disable chrome notifications to complete hours (coming soon).
                         </small>
                     </label>
+                </div>
+                <div class="input-group">
+                    <label for="login-domain">Login Domain</label>
+                    <input type="text" class="form-control" id="login-domain" aria-describedby="login-domain-help" placeholder="Deltek Login Domain">
+                    <small id="login-domain-help" class="form-text text-muted">
+                        The domain used to login to deltek. Entering it here will ensure it's always
+                        auto-populated as long as the extension is running.
+                    </small>
                 </div>
             </div>
 

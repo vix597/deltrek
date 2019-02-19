@@ -40,10 +40,10 @@ function TimesheetDb() {
         chrome.storage.sync.get(this.allowed_hours_key, function(items) {
             if (complete) {
                 if (items && this.allowed_hours_key in items) {
-                    console.log("Got user allowed hours data from DB: ", items);
+                    console.debug("Got user allowed hours data from DB: ", items);
                     complete(items[this.allowed_hours_key]);
                 } else {
-                    console.log("WARNING: Could not retrieve data from the database. Items is either null or invalid: ", items);
+                    console.warn("Could not retrieve data from the database. Items is either null or invalid: ", items);
                     complete(null);
                 }
             }
@@ -69,13 +69,13 @@ function TimesheetDb() {
                 var current_allowed_hours = data;
 
                 chrome.storage.sync.clear(function() {
-                    console.log("Storage cleared.");
+                    console.debug("Storage cleared.");
 
                     this.update(current_month, function() {
-                        console.log("Current month re-added to storage.");
+                        console.debug("Current month re-added to storage.");
 
                         this.update_allowed_hours(current_allowed_hours, function() {
-                            console.log("Current allowed hours re-added to storage.");
+                            console.debug("Current allowed hours re-added to storage.");
                             if (complete) {
                                 complete();
                             }

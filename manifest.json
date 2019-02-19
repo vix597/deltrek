@@ -7,8 +7,8 @@
     "content_scripts": [
         {
             "matches": [
-                "https://te3prod.deltekenterprise.com/DeltekTC/TimeCollection.msv",
-                "https://te3prod.deltekenterprise.com/DeltekTC/welcome.msv"
+                "https://*.deltekenterprise.com/DeltekTC/TimeCollection.msv",
+                "https://*.deltekenterprise.com/DeltekTC/welcome.msv"
             ],
             "js": [
                 "external/js/jquery-3.3.1.min.js",
