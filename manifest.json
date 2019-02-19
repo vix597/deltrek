@@ -3,7 +3,7 @@
     "name": "Deltrek! Time Tracking that works.",
     "short_name": "Deltrek!",
     "description": "Track hours and hour targets month-by-month per contract.",
-    "version": "0.0.0.8",
+    "version": "0.0.0.7",
     "content_scripts": [
         {
             "matches": [
