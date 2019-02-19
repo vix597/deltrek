@@ -111,6 +111,7 @@ function refresh() {
                 }
 
                 var panelType = '';
+                var textColor = '';
                 if (!allowed_hours && hours > 0) {
                     panelType = 'bg-danger';
                 } else if(allowed_hours > 0) {
@@ -126,11 +127,15 @@ function refresh() {
                     }
                 }
 
+                if (panelType.length) {
+                    textColor = 'text-white';
+                }
+
                 $("#deltrek").prepend(
-                    $("<div class='card text-white " + panelType + "' " + display + " >").append(
+                    $("<div class='card " + panelType + "' " + display + " >").append(
                         $("<div class='card-header' id='" + key_as_id + "-heading'>").append(
                             $("<h2 class='mb-0'>").append(
-                                $("<button class='btn btn-link text-white' type='button' data-toggle='collapse' data-target='#" + key_as_id + "-collapse' aria-controls='" + key_as_id + "-collapse'>")
+                                $("<button class='btn btn-link " + textColor + "' type='button' data-toggle='collapse' data-target='#" + key_as_id + "-collapse' aria-controls='" + key_as_id + "-collapse'>")
                                 .text(key + " (Worked: " + hours + "/" + allowed_hours + ")")
                             )
                         )
