@@ -124,6 +124,8 @@ function refresh() {
                         panelType = 'bg-danger';
                     } else if (current_percent > lower_bound && current_percent < upper_bound) {
                         panelType = 'bg-success';
+                    } else if (current_percent == 100) {
+                        panelType = 'bg-success';
                     }
                 }
 
@@ -180,6 +182,18 @@ $(document).ready(function() {
 
         if (result && result.length) {
             console.debug("We're on the deltek page, don't show 'Go to Deltek' link");
+            $("#go-to-deltek").hide();
+        }
+    });
+
+    chrome.storage.sync.get({
+        deltek_link: ""
+    }, function(items) {
+        console.debug("Content page options loaded: ", items);
+        if (items.deltek_link && items.deltek_link.length) {
+            console.debug("Setting deltek link: ", items.deltek_link);
+            $("#go-to-deltek-link").attr("href", items.deltek_link);
+        } else {
             $("#go-to-deltek").hide();
         }
     });

@@ -13,12 +13,12 @@
         <!-- Styles -->
         <link href="external/css/bootstrap.min.css" rel="stylesheet">
     </head>
-    <body>
-        <div class="card p-0 m-0">
+    <body class="container" style="overflow: hidden;">
+        <div class="card">
             <h4 class="card-header">Deltrek Options</h4>
 
             <div class="card-body">
-                <div class="input-group">
+                <div class="form-group">
                     <label>
                         <input id="show-hidden" type="checkbox">&nbsp; Show hidden hours
                         <small id="show-hidden-help" class="form-text text-muted">
@@ -26,7 +26,7 @@
                         </small>
                     </label>
                 </div>
-                <div class="input-group">
+                <div class="form-group">
                     <label>
                         <input id="enable-reminders" type="checkbox">&nbsp; Enable Reminders
                         <small id="show-hidden-help" class="form-text text-muted">
@@ -34,12 +34,20 @@
                         </small>
                     </label>
                 </div>
-                <div class="input-group">
+                <div class="form-group">
                     <label for="login-domain">Login Domain</label>
                     <input type="text" class="form-control" id="login-domain" aria-describedby="login-domain-help" placeholder="Deltek Login Domain">
                     <small id="login-domain-help" class="form-text text-muted">
                         The domain used to login to deltek. Entering it here will ensure it's always
                         auto-populated as long as the extension is running.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="deltek-link">Deltek Link</label>
+                    <input type="text" class="form-control" id="deltek-link" aria-describedby="deltek-link-help" placeholder="https://blah.deltekenterprise.com">
+                    <small id="deltek-link-help" class="form-text text-muted">
+                        Once set, this will be used for the "go to deltek" link when you're not
+                        on the deltek page.
                     </small>
                 </div>
             </div>
